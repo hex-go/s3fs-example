@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: s3-app-1
+  labels:
+    k8s-app: s3-app-1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: s3-app-1
+  template:
+    metadata:
+      labels:
+        k8s-app: s3-app-1
+    spec:
+      containers:
+      - name: s3-app-1
+        imagePullPolicy: Always
+        image: reg.chebai.org/paas/s3fs-test:latest
+        command: ['sh', '-c', 'tail -f /etc/hosts']
+        ports:
+        - containerPort: 8080
+          name: grpc
+        securityContext:
+          privileged: true
+          capabilities:
+            add:
+            - SYS_ADMIN
